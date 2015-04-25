@@ -46,7 +46,7 @@ public class FightActivity extends ActionBarActivity {
         if (player.equals("1")){
             list = (ArrayList) player1Map.get("manaAmt");
         }else{
-            list = (ArrayList) player1Map.get("manaAmt");
+            list = (ArrayList) player2Map.get("manaAmt");       //shouldnt this be player2Map?
         }
         selfMana1.setText(list.get(0).toString());
         selfMana2.setText(list.get(1).toString());
@@ -306,6 +306,7 @@ public class FightActivity extends ActionBarActivity {
 
                         pushPlayerMapstoDB();
 
+                        //Disable buttons for spells that cannot be cast.
                         if (mana1 >= 3){
                             spell_111.setEnabled(true);
                             spell_111.setImageResource(R.drawable.s02_flare_small);
@@ -442,7 +443,6 @@ public class FightActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if (permission == 1){
-//                    Toast.makeText(getBaseContext(), "Trying to cast Flare.", Toast.LENGTH_SHORT).show();
                     Map<String,Object> mapSelf, mapEnemy;
                     if(player.equals("1")){
                         mapSelf = player1Map;
