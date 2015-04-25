@@ -53,15 +53,29 @@ public class FightActivity extends ActionBarActivity {
         selfMana3.setText(list.get(2).toString());
     }
 
+    public static int safeLongToInt(long l) {
+        return (int) Math.max(Math.min(Integer.MAX_VALUE, l), Integer.MIN_VALUE);
+    }
 
     public void checkVictory(String player){
-        long myHealth, enemyHealth;
+        int myHealth, enemyHealth;
+        int h1 = 0, h2 = 0;
+
+        if (player1Map.get("health").getClass().equals(Integer.class)){
+            h1 = (int) player1Map.get("health");
+            h2 = (int) player2Map.get("health");
+        }else if (player1Map.get("health").getClass().equals(Long.class)){
+            h1 = Integer.parseInt(player1Map.get("health").toString());
+            h2 = Integer.parseInt(player2Map.get("health").toString());
+        }
+
+
         if (player.equals("1")){
-            myHealth = ((Long) player1Map.get("health"));
-            enemyHealth = ((Long) player2Map.get("health"));
+            myHealth = h1;
+            enemyHealth = h2;
         } else{
-            myHealth =  ((Long) player2Map.get("health"));
-            enemyHealth = ((Long) player1Map.get("health"));
+            myHealth =  h2;
+            enemyHealth = h1;
         }
 
         if (myHealth <= 0){
