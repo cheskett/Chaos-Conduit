@@ -97,7 +97,7 @@ public class FightActivity extends ActionBarActivity {
 
          }
 
-        if (enemyHealth <= 0){
+        else if (enemyHealth <= 0){
             String message = "YOU WIN!";
             AlertDialog.Builder adb = new AlertDialog.Builder(FightActivity.this);
             adb.setTitle("Game Over");
@@ -123,13 +123,13 @@ public class FightActivity extends ActionBarActivity {
         player1Map = map;
         if (player != null){
             if(player.equals("1")){
-                //checkVictory(("1"));
                 ArrayList<Long> list = (ArrayList<Long>) map.get("manaAmt");
                 selfMana1.setText(list.get(0).toString());
                 selfMana2.setText(list.get(1).toString());
                 selfMana3.setText(list.get(2).toString());
                 selfHealth.setText(player1Map.get("health").toString());
                 enemyHealth.setText(player2Map.get("health").toString());
+                //checkVictory(("1"));
             }
         }
     }
@@ -139,13 +139,13 @@ public class FightActivity extends ActionBarActivity {
         player2Map = map;
         if (player != null){
             if(player.equals("2")){
-                //checkVictory(("2"));
                 ArrayList<Long> list = (ArrayList<Long>) map.get("manaAmt");
                 selfMana1.setText(list.get(0).toString());
                 selfMana2.setText(list.get(1).toString());
                 selfMana3.setText(list.get(2).toString());
                 enemyHealth.setText(player1Map.get("health").toString());
                 selfHealth.setText(player2Map.get("health").toString());
+                //checkVictory(("2"));
             }
         }
     }
@@ -238,7 +238,6 @@ public class FightActivity extends ActionBarActivity {
         gamesRef.child(ID).child("turn").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                updatePlayerMapsFromDB();
                 if (dataSnapshot.getValue().toString().equals(player)) {
                     //YOUR NEW TURN STARTS!
                     permission = 1;
@@ -392,7 +391,7 @@ public class FightActivity extends ActionBarActivity {
                    // }
                     start = false;
 
-                    checkVictory(player);
+
 
 //                    if (mana1 + mana2 + mana3 > 5) {
 //                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
@@ -400,6 +399,7 @@ public class FightActivity extends ActionBarActivity {
 //                    }
                     //grey out spells that do not meet mana requirement
                 }
+                checkVictory(player);
             }
 
             @Override
@@ -788,7 +788,42 @@ public class FightActivity extends ActionBarActivity {
         });
 
 
-        updatePlayerMapsFromDB();
+        gamesRef.child(ID).child("player1").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                try {
+                    Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                    setPlayer1Map(map);
+                } catch (Exception e) {
+                    Log.w("UPDATE MAPS", "TRY AGAIN!");
+                    //updatePlayerMapsFromDB();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        gamesRef.child(ID).child("player2").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                try {
+                    Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                    setPlayer2Map(map);
+                } catch (Exception e) {
+                    Log.w("UPDATE MAPS", "TRY AGAIN!");
+                    //updatePlayerMapsFromDB();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        //updatePlayerMapsFromDB();
 
     }
 
