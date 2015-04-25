@@ -30,6 +30,7 @@ public class MatchmakingActivity extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_opponents);
+        Firebase.setAndroidContext(this);
         firebase = new Firebase(getResources().getString(R.string.firebase));
         AuthData auth = firebase.getAuth();
         UID = auth.getUid();
@@ -47,7 +48,6 @@ public class MatchmakingActivity extends ActionBarActivity implements View.OnCli
         intent.putExtra("ID", ID);
         intent.putExtra("Player", "2");
         startActivity(intent);
-        finish();
     }
 
     public void matchNotFound(){
@@ -64,7 +64,6 @@ public class MatchmakingActivity extends ActionBarActivity implements View.OnCli
         Intent intent = new Intent(getBaseContext(), WaitMatchActivity.class);
         intent.putExtra("ID", ID);
         startActivity(intent);
-        finish();
     }
 
 
