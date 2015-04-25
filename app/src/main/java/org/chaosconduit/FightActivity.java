@@ -53,11 +53,63 @@ public class FightActivity extends ActionBarActivity {
         selfMana3.setText(list.get(2).toString());
     }
 
+
+    public void checkVictory(String player){
+        int myHealth, enemyHealth;
+        if (player.equals("1")){
+            myHealth = (int) (long) player1Map.get("health");
+            enemyHealth = (int) (long) player2Map.get("health");
+        } else{
+            myHealth = (int) (long) player2Map.get("health");
+            enemyHealth = (int) (long) player1Map.get("health");
+        }
+
+        if (myHealth <= 0){
+            String message = "YOU LOSE!";
+            AlertDialog.Builder adb = new AlertDialog.Builder(FightActivity.this);
+            adb.setTitle("Game Over");
+            adb.setMessage(message);
+            adb.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // if this button is clicked, close
+                    // current activity
+                    Intent intent = new Intent(getBaseContext(),MainActivity.class);
+                    startActivity(intent);
+                    FightActivity.this.finish();
+                }
+            });
+
+            adb.show();
+
+         }
+
+        if (enemyHealth <= 0){
+            String message = "YOU WIN!";
+            AlertDialog.Builder adb = new AlertDialog.Builder(FightActivity.this);
+            adb.setTitle("Game Over");
+            adb.setMessage(message);
+            adb.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // if this button is clicked, close
+                    // current activity
+                    Intent intent = new Intent(getBaseContext(),MainActivity.class);
+                    startActivity(intent);
+                    FightActivity.this.finish();
+                }
+
+            });
+
+            adb.show();
+
+        }
+    }
+
     public void setPlayer1Map(Map<String,Object> map){
         Log.w("MAP TEST", "PLAYER 1");
         player1Map = map;
         if (player != null){
             if(player.equals("1")){
+                //checkVictory(("1"));
                 ArrayList<Long> list = (ArrayList<Long>) map.get("manaAmt");
                 selfMana1.setText(list.get(0).toString());
                 selfMana2.setText(list.get(1).toString());
@@ -73,6 +125,7 @@ public class FightActivity extends ActionBarActivity {
         player2Map = map;
         if (player != null){
             if(player.equals("2")){
+                //checkVictory(("2"));
                 ArrayList<Long> list = (ArrayList<Long>) map.get("manaAmt");
                 selfMana1.setText(list.get(0).toString());
                 selfMana2.setText(list.get(1).toString());
@@ -324,6 +377,8 @@ public class FightActivity extends ActionBarActivity {
                         }
                    // }
                     start = false;
+
+                    checkVictory(player);
 
 //                    if (mana1 + mana2 + mana3 > 5) {
 //                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());

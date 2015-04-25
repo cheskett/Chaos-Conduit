@@ -3,10 +3,12 @@ package org.chaosconduit;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.firebase.client.FirebaseError;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoginActivity extends ActionBarActivity {
 
@@ -32,6 +35,7 @@ public class LoginActivity extends ActionBarActivity {
     private boolean isRegistrationForm = false;
     int repeatPassEditTextID;
     int usernameEditTextID;
+    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
 
     @Override
@@ -205,7 +209,11 @@ public class LoginActivity extends ActionBarActivity {
     private void setFormToRegistration() {
         LinearLayout loginForm = (LinearLayout)findViewById(R.id.loginFrame);
         ((RelativeLayout.LayoutParams)loginForm.getLayoutParams()).addRule(RelativeLayout.CENTER_VERTICAL, 0);
-        loginForm.getLayoutParams().height = 1000;
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int height = size.y;
+        loginForm.getLayoutParams().height = (int) (height * 0.7);
 
         Toast.makeText(getBaseContext(), "Hello", Toast.LENGTH_SHORT);
 
@@ -224,7 +232,7 @@ public class LoginActivity extends ActionBarActivity {
         repeatPassEditText.setTextColor(Color.BLACK);
         repeatPassEditText.setLinkTextColor(Color.BLACK);
 
-        repeatPassEditTextID = View.generateViewId();
+        repeatPassEditTextID = generateViewId();
         repeatPassEditText.setId(repeatPassEditTextID);
 
         //add it to the view
@@ -239,7 +247,7 @@ public class LoginActivity extends ActionBarActivity {
         usernameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         usernameEditText.setTextColor(Color.BLACK);
 
-        usernameEditTextID = View.generateViewId();
+        usernameEditTextID = generateViewId();
         usernameEditText.setId(usernameEditTextID);
 
         loginForm.addView(usernameEditText);
@@ -308,4 +316,17 @@ public class LoginActivity extends ActionBarActivity {
 
         });
     }
+
+    public static int generateViewId() {
+        for (;;) {
+            final int result = sNextGeneratedId.get();
+            // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
+            int newValue = result + 1;
+            if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
+            if (sNextGeneratedId.compareAndSet(result, newValue)) {
+                return result;
+            }
+        }
+    }
+
 }
