@@ -55,13 +55,13 @@ public class FightActivity extends ActionBarActivity {
 
 
     public void checkVictory(String player){
-        int myHealth, enemyHealth;
+        long myHealth, enemyHealth;
         if (player.equals("1")){
-            myHealth = (int) (long) player1Map.get("health");
-            enemyHealth = (int) (long) player2Map.get("health");
+            myHealth = ((Integer) player1Map.get("health")).longValue();
+            enemyHealth = ((Integer) player2Map.get("health")).longValue();
         } else{
-            myHealth = (int) (long) player2Map.get("health");
-            enemyHealth = (int) (long) player1Map.get("health");
+            myHealth =  ((Integer) player2Map.get("health")).longValue();
+            enemyHealth = ((Integer) player1Map.get("health")).longValue();
         }
 
         if (myHealth <= 0){
