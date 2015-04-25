@@ -20,27 +20,6 @@ import java.util.Random;
  */
 public class Spells {
 
-//    public static List BaseSpell(Map<String, Object> mapSelf,
-//                                 Map<String, Object> mapEnemy,
-//                                 int redAmp) {
-//        List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-//        int enemyHealth = Integer.parseInt(mapEnemy.get("health").toString());
-//        int damage = 6;
-//
-//        if (redAmp == 1) {
-//            damage = 6;
-//        }
-//        else if (redAmp == 2) {
-//            damage = 8;
-//        }
-//
-//        enemyHealth = enemyHealth - damage;
-//        mapEnemy.put("health", enemyHealth);
-//        maps.add(mapSelf);
-//        maps.add(mapEnemy);
-//        return maps;
-//    }
-
     public static List Flare(Map<String, Object> mapSelf, Map<String, Object> mapEnemy, int redAmp) {
         List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
         int enemyHealth = Integer.parseInt(mapEnemy.get("health").toString());
@@ -327,15 +306,14 @@ public class Spells {
             if ((enemyMana.get(0) == 0) && (enemyMana.get(1) == 0) && (enemyMana.get(2) == 0)) {
                 found = 1;
             }
-            steal = randomSteal.nextInt(3) + 1;
+            steal = randomSteal.nextInt(3);
             long tryEnemyMana = enemyMana.get(steal);
             if (tryEnemyMana > 0) {
                 found = 1;
                 enemyMana.set(steal, tryEnemyMana - 1);
+                selfMana.set(steal, selfMana.get(steal) + 1);
             }
         }
-
-        selfMana.set(steal, selfMana.get(steal) + 1);
 
         long selfRedMana = selfMana.get(0);
         long selfBlueMana = selfMana.get(2);
@@ -398,7 +376,7 @@ public class Spells {
         int enemyHealth = Integer.parseInt(mapEnemy.get("health").toString());
         //get enemyMana and remove it
         int damage = 5;
-        int removeMana = 2;
+        int removeMana = 5;
 
         if (yellowAmp == 1) {
             damage = 7;
@@ -416,13 +394,15 @@ public class Spells {
         ArrayList<Long> enemyMana = (ArrayList<Long>) mapEnemy.get("manaAmt");
         Random randomSteal = new Random();
         int found = 0, steal = 0;
-        while (removeMana != 0) {
+        while (removeMana > 0) {
+            steal = 0;
+            found = 0;
             while (found == 0) {
                 if ((enemyMana.get(0) == 0) && (enemyMana.get(1) == 0) && (enemyMana.get(2) == 0)) {
                     found = 1;
                     removeMana = 0;
                 }
-                steal = randomSteal.nextInt(3) + 1;
+                steal = randomSteal.nextInt(3);
                 long tryEnemyMana = enemyMana.get(steal);
                 if (tryEnemyMana > 0) {
                     found = 1;
